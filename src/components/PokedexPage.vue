@@ -7,7 +7,7 @@
               <h2 class="poke-name">#{{ pokemonData.id }}</h2>
             </div>
             <div class="col-6">
-              <button class="btn btn-shuffle" @click="fetchRandomPokemon">Mostrar Pokémon</button>
+              <button class="btn btn-shuffle" @click="fetchRandomPokemon">Show Pokémon</button>
             </div>
             <div class="col-3">
               <img class="back-img" :class="{'animate__animated animate__bounce' : isAnimating}" :src="pokemonData.sprites.front_default" :alt="pokemonData.name" />
@@ -20,6 +20,7 @@
             <div class="pokedex-screen__top__right"></div>
           </div>
           <h2 class="poke-name">{{ pokemonData.name }}</h2>
+          <h5>{{ showEvolution }}</h5>
           <div class="pokedex-screen__bottom">
             <div class="pokedex-screen__bottom__left"></div>
             <div class="pokedex-screen__bottom__middle">
@@ -33,18 +34,6 @@
             <div class="pokedex-screen__bottom__right"></div>
           </div>
         </div>
-        <!-- <div class="pokedex-buttons">
-          <div class="pokedex-buttons__top">
-            <div class="pokedex-buttons__top__left"></div>
-            <div class="pokedex-buttons__top__middle"><button class="btn" @click="fetchRandomPokemon">Change Pokemon</button></div>
-            <div class="pokedex-buttons__top__right"></div>
-          </div>
-          <div class="pokedex-buttons__bottom">
-            <div class="pokedex-buttons__bottom__left"></div>
-            <div class="pokedex-buttons__bottom__middle"></div>
-            <div class="pokedex-buttons__bottom__right"></div>
-          </div>
-        </div> -->
       </div>
       </div>
       <div v-else>
@@ -55,20 +44,32 @@
   
   <script>
   import axios from 'axios';
-  import { mapState, mapMutations } from 'vuex';
+  import { mapState, mapMutations, mapGetters } from 'vuex';
   export default {
     name: 'PokedexPage',
     props: {
       
     },
-    mounted() {
+    created() {
       this.fetchRandomPokemon(); // Initial fetch
       setInterval(() => {
         this.fetchRandomPokemon();// Fetch a random Pokémon every 30 seconds
       }, 30000); // 30 seconds in milliseconds
     },
+    beforeUnmount() {
+      // Clear the interval when the component is about to be destroyed
+      clearInterval(this.intervalId);
+    },
     computed: {
     ...mapState(['randomPokemon', 'randomPokemonEvolution', 'firstEvolution', 'secondEvolution', 'thirdEvolution']),
+    ...mapGetters([
+        'getRandomPokemon', 
+        'getRandomPokemonEvolution',
+        'getFirstEvolution',
+        'getSecondEvolution',
+        'getThirdEvolution',
+        'getFlavorText'
+      ]),
       typeColor() {
         const typeColors = {
           electric: '--electric',
@@ -188,6 +189,17 @@
         };
 
         return `var(${gradientMap[this.pokemonData.types[0].type.name]})`;
+      },
+      showEvolution() {
+       if(this.getFirstEvolution === this.getRandomPokemon?.name) {
+        return '1st Evolution'
+       } else if(this.getSecondEvolution === this.getRandomPokemon?.name) {
+        return '2nd Evolution'
+       } else if(this.getThirdEvolution === this.getRandomPokemon?.name) {
+        return '3rd Evolution'
+       } else {
+         return 'No more evolutions'
+       }
       },
     },
     data () {
@@ -463,7 +475,7 @@
 /* On screens that are 600px or less, set the background color to olive */  
   @media screen and (max-width: 600px) {
     .btn-shuffle {
-      padding: 1% 4%;
+      padding: 1% 10%;
       font-size: 1rem;
     }
     .back-img {

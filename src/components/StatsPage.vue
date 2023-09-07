@@ -9,11 +9,11 @@
           </div>
           <hr>
           <div class="row my-4">
-            <div class="col-6">
-              <h1><b>Height:</b> {{ getHeight(getRandomPokemon.height) + ' m' }}</h1>
+            <div class="col-6 px-sm-1">
+              <h1 class="height"><b>Height:</b> {{ getHeight(getRandomPokemon.height) + ' m' }}</h1>
             </div>
-            <div class="col-6">
-              <h1><b>Weight:</b> {{ getWeight(getRandomPokemon.weight) + ' kg' }}</h1>
+            <div class="col-6 px-sm-1">
+              <h1 class="weight"><b>Weight:</b> {{ getWeight(getRandomPokemon.weight) + ' kg' }}</h1>
             </div>
           </div>
           <hr>
@@ -89,21 +89,23 @@
             <div class="col-12">
               <div class="next-evolution" >
                 <h1><b>Evolutions</b></h1>
-                {{ showEvolution  }}
               </div>
             </div>
             <div class="col-12 d-flex align-items-center justify-content-center">
               <div class="col-4">
-              {{ getRandomPokemonEvolution.chain?.species?.name }}
-              <img class="evo-img" :src="first_evolution" alt="">
+                <span class="type-tag-evo" v-if="this.getFirstEvolution">
+                  <a :href="`https://www.pokemon.com/uk/pokedex/${this.getFirstEvolution}`" class="type-text-evo">{{ this.getFirstEvolution }}</a>
+                </span>
               </div>
               <div class="col-4">
-                {{ this.getRandomPokemonEvolution.chain?.evolves_to[0]?.species?.name }}
-                <img class="evo-img" :src="second_evolution" alt="">
+                <span class="type-tag-evo" v-if="this.getSecondEvolution">
+                  <a :href="`https://www.pokemon.com/uk/pokedex/${this.getSecondEvolution}`" class="type-text-evo">{{ this.getSecondEvolution }}</a>
+                </span>
               </div>
               <div class="col-4">
-                {{ this.getRandomPokemonEvolution.chain?.evolves_to[0]?.evolves_to[0]?.species?.name }}
-                <img class="evo-img" :src="third_evolution" alt="">
+                <span class="type-tag-evo" v-if="this.getThirdEvolution">
+                  <a :href="`https://www.pokemon.com/uk/pokedex/${this.getThirdEvolution}`" class="type-text-evo">{{ this.getThirdEvolution }}</a>
+                </span>
               </div>
             </div>
           </div>
@@ -122,7 +124,6 @@
       ProgressBar,
     },
     mounted() {
-      this.getEvolutionImgs()
     },
     data () {
       return {
@@ -142,18 +143,6 @@
         'getThirdEvolution',
         'getFlavorText'
       ]),
-      showEvolution() {
-       if(this.getRandomPokemonEvolution.chain?.species?.name === this.getRandomPokemon?.name) {
-        return '1st Evolution'
-       } else if(this.getRandomPokemonEvolution.chain?.evolves_to[0]?.species?.name === this.getRandomPokemon?.name) {
-        return '2nd Evolution'
-       } else if(this.getRandomPokemonEvolution.chain?.evolves_to[0]?.evolves_to[0]?.species?.name === this.getRandomPokemon?.name) {
-        return '3rd Evolution'
-       } else {
-         return 'No more evolutions'
-       }
-      },
-      
     },
     methods: {
       typeIcons(type) {
@@ -220,25 +209,6 @@
         /* border: 25px solid rgba(219,30,46, 1);; */
         
     }
-    #hr {
-    -webkit-transform:rotate(90deg);
-    width: 45vh;
-    height:2px;
-    left:130px;
-    border:2px;
-    margin: 1rem 0;
-    color: inherit;
-    border: 0;
-    border-top: var(--bs-border-width) solid;
-    opacity: .25;
-    display: block;
-    unicode-bidi: isolate;
-    margin-block-start: 0.5em;
-    margin-block-end: 0.5em;
-    margin-inline-start: auto;
-    margin-inline-end: auto;
-    overflow: hidden;
-}
   .stat-card {
     width: 100%;
   }
@@ -247,13 +217,30 @@
     font-weight: 500;
     text-align: center;
   }
-  .type-tag {
-    display: inline-block;
+  .type-tag-evo {
+    display: inline-flex;
+    width: 70%;
     padding: 1% 5%;
-    border-radius: 25px;
+    border-radius: 50px;
+    font-size: 1rem;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 0 1%;
+    background-color: var(--gray);
     color: var(--black);
-    font-size: 1.5rem;
-    text-transform: capitalize; 
+  }
+  a {
+    padding: 1%;
+  }
+  .type-text-evo {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 3%;
+  }
+  .type-tag-evo:hover {
+    cursor: pointer;
+    background-color: var(--black);
+    color: var(--white);
   }
   ul {
     width: 100%;
@@ -282,6 +269,7 @@
     height: 1.5rem;
     margin-right: 1rem;
     margin-bottom: 1rem;
+    fill: #DD2D51;
   }
   .evo-img {
     width: 100%;
@@ -291,11 +279,14 @@
       width: 100%;
       border-radius: 30px 30px 0 0;
     }
-    .type-text {
-      font-size: 2rem;
+    .type-tag-evo {
+      width: 65%;
+    }
+    .type-text-evo {
+      font-size: 1.5rem;
     }
     ul {
-      padding-left: 20%;
+      padding-left: 5%;
     }
   }
 
@@ -304,6 +295,20 @@
     #stats {
       width: 100%;
       border-radius: 30px 30px 0 0;
+    }
+    .type-tag-evo {
+      display: inline-flex;
+      width: 85%;
+      padding: 2% 6%;
+      border-radius: 50px;
+      font-size: 1rem;
+      margin: 0 2%;
+    }
+    .type-text-evo {
+      font-size: 1.2em;
+    }
+    .height, .weight {
+      font-size: 1.5em;
     }
   }
   </style>
