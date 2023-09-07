@@ -22,3 +22,17 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Tech Stack
+<ul>
+  <li>VueJS 3</li>
+  <li>CSS</li>
+  <li>Boostrap</li>
+  <li>Vuex</li>
+  <li>Axios</li>
+</ul>
+
+##REST API
+The API used for this website is [PokéAPI](https://pokeapi.co/)
+
+### Original Design by Frida SuFrida
