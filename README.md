@@ -24,9 +24,10 @@ npm run lint
 <ul>
   <li>VueJS 3</li>
   <li>CSS</li>
-  <li>Boostrap</li>
+  <li>Bootstrap</li>
   <li>Vuex</li>
   <li>Axios</li>
+  <li>Webpack</li>
 </ul>
 
 ## REST API
