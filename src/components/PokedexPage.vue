@@ -1,8 +1,8 @@
 <template>
     <div id="pokedex">
-      <div v-if="pokemonData" class="poke-container" :style="{ background : typeGradient }">
+      <div v-if="pokemonData" class="poke-container">
         <div class="pokedex-container">
-          <div class="row w-75 justify-content-between">
+          <div class="row w-100 w-md-75 justify-content-between align-items-center">
             <div class="col-3">
               <h2 class="poke-name">#{{ pokemonData.id }}</h2>
             </div>
@@ -23,8 +23,11 @@
           <div class="pokedex-screen__bottom">
             <div class="pokedex-screen__bottom__left"></div>
             <div class="pokedex-screen__bottom__middle">
-              <span class="type-tag" :style="{ backgroundColor: typeColor }">
-                <img class="type-icon" :src="require(`../assets/svg/${typeIcons(pokemonData.types[0].type.name)}`)" alt="">{{ pokemonData.types[0].type.name }}
+              <span class="type-tag" :style="{ backgroundColor: typeColor, color: typeFontColor }">
+                <p class="type-text">{{ pokemonData.types[0]?.type.name }}</p>
+              </span>
+              <span v-if="pokemonData.types[1]?.type.name " class="type-tag" :style="{ backgroundColor: typeColor2, color: typeFontColor2 }">
+                <p class="type-text">{{ pokemonData.types[1]?.type.name }}</p>
               </span>
             </div>
             <div class="pokedex-screen__bottom__right"></div>
@@ -90,6 +93,78 @@
         
         return `var(${typeColors[this.pokemonData.types[0].type.name]})`;
       },
+      typeFontColor() {
+        const typeColors = {
+          electric: '--black',
+          fire: '--white',
+          grass: '--black',
+          water: '--black',
+          bug: '--black',
+          flying: '--black',
+          normal: '--black',
+          poison: '--white',
+          ground: '--black',
+          fairy: '--white',
+          fighting: '--white',
+          psychic: '--white',
+          rock: '--black',
+          steel: '--black',
+          ice: '--black',
+          ghost: '--white',
+          dragon: '--white',
+          dark: '--white',
+        };
+        
+        return `var(${typeColors[this.pokemonData.types[0].type.name]})`;
+      },
+      typeColor2() {
+        const typeColors = {
+          electric: '--electric',
+          fire: '--fire',
+          grass: '--grass',
+          water: '--water',
+          bug: '--bug',
+          flying: '--flying',
+          normal: '--normal',
+          poison: '--poison',
+          ground: '--ground',
+          fairy: '--fairy',
+          fighting: '--fighting',
+          psychic: '--psychic',
+          rock: '--rock',
+          steel: '--steel',
+          ice: '--ice',
+          ghost: '--ghost',
+          dragon: '--dragon',
+          dark: '--dark',
+        };
+        
+        return `var(${typeColors[this.pokemonData.types[1].type.name]})`;
+      },
+      typeFontColor2() {
+        const typeColors = {
+          electric: '--black',
+          fire: '--white',
+          grass: '--black',
+          water: '--black',
+          bug: '--black',
+          flying: '--black',
+          normal: '--black',
+          poison: '--white',
+          ground: '--black',
+          fairy: '--white',
+          fighting: '--white',
+          psychic: '--white',
+          rock: '--black',
+          steel: '--black',
+          ice: '--black',
+          ghost: '--white',
+          dragon: '--white',
+          dark: '--white',
+        };
+        
+        return `var(${typeColors[this.pokemonData.types[1].type.name]})`;
+      },
       typeGradient() {
         const gradientMap = {
           electric: '--electric-gradient',
@@ -122,7 +197,7 @@
       }
     },
     methods: {
-      ...mapMutations(['setRandomPokemon', 'setRandomPokemonEvolution', 'setFirstEvolution', 'setSecondEvolution', 'setThirdEvolution']),
+      ...mapMutations(['setRandomPokemon', 'setRandomPokemonEvolution', 'setFirstEvolution', 'setSecondEvolution', 'setThirdEvolution', 'setFlavorText']),
       restartAnimation() {
       this.isAnimating = false;
 
@@ -152,7 +227,8 @@
           .then((speciesResponse) => {
             // Handle species data here
             const evo = speciesResponse.data.evolution_chain.url;
-            
+            const fileterdTextEntries = speciesResponse.data.flavor_text_entries.filter(element => element.language.name === 'en');
+            this.setFlavorText(fileterdTextEntries[0].flavor_text);
             if(evo) {
               return axios.get(evo);
             } else {
@@ -175,30 +251,6 @@
             console.error('Error fetching Pokémon data:', error);
           });
       },
-      typeIcons(type) {
-        const typeIcons = {
-          electric: 'bolt-solid.svg', // Font Awesome lightning bolt icon
-          fire: 'fire-solid.svg', // Font Awesome fire icon
-          grass: 'leaf-solid.svg', // Font Awesome leaf icon
-          water: 'droplet-solid.svg', // Font Awesome water droplet icon
-          bug: 'bug-solid.svg', // Font Awesome bug icon
-          flying: 'feather-solid.svg', // Font Awesome dove icon
-          normal: 'circle-dot-solid.svg', // Font Awesome circle icon
-          poison: 'skull-solid.svg', // Font Awesome skull icon
-          ground: 'mountain-solid.svg', // Font Awesome mountain icon
-          fairy: 'star-solid.svg', // Font Awesome wizard hat icon
-          fighting: 'hand-fist-solid.svg', // Font Awesome raised fist icon
-          psychic: 'eye-solid.svg', // Font Awesome brain icon
-          rock: 'hill-rockslide-solid.svg', // Font Awesome gem icon
-          steel: 'shield-halved-solid.svg', // Font Awesome shield icon
-          ice: 'snowflake-regular.svg', // Font Awesome snowflake icon
-          ghost: 'ghost-solid.svg', // Font Awesome ghost icon
-          dragon: 'dragon-solid.svg', // Font Awesome dragon icon
-          dark: 'moon-solid.svg', // Font Awesome moon icon
-        };
-        console.log(typeIcons[type])
-        return typeIcons[type];
-      }
     },
   }
   </script>
@@ -207,14 +259,16 @@
   <style scoped>
   #pokedex {
     color: var(--white);
+    z-index: 5 !important;
+    position: relative;
   }
   .poke-name {
     text-transform: capitalize;
-    font-size: 3rem !important;
+    font-size: 3.5rem !important;
   }
   .back-img {
     filter: grayscale(100%);
-
+    width: 50%;
   }
   .btn-shuffle {
     background-color: var(--white);
@@ -228,7 +282,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   .btn-shuffle:hover {
-    background-color: var(--black);
+    background-color: var(--gray);
     color: var(--white);
     transition: 0.3s;
   }
@@ -238,6 +292,7 @@
     align-items: center;
     width: 100%;
     overflow-y: hidden;
+    background: radial-gradient(circle at 50% 50%, rgba(168,168,120, 0.5) 1%, rgba(19, 18, 18, 0) 35%);
   }
   .pokedex-container {
     display: flex;
@@ -248,7 +303,7 @@
     height: auto;
     border-radius: 10px;
     overflow-x: hidden;
-    padding: 5% 5% 0;
+    padding: 3% 5% 0 5%;
   }
   .pokedex-screen {
     display: flex;
@@ -306,17 +361,24 @@
   }
   .type-tag {
     display: inline-flex;
-    width: 37%;
-    padding: 1% 5%;
-    border-radius: 25px;
-    color: var(--black);
-    font-size: 1.5rem;
+    width: 40%;
+    padding: 1% 3%;
+    border-radius: 50px;
+    font-size: 2rem;
     align-items: center;
     justify-content: space-evenly;
+    font-size: 2em;
+    margin: 0 1%;
+    /* font-family: 'Roboto', sans-serif !important; */
   }
   .type-icon {
-    width: 20px;
-    height: 20px;
+    width: 1.5em;
+    height: 1.5em;
+  }
+  .type-text {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 3%;
   }
   .pokedex-screen__bottom__middle > .type-tag > .type-icon {
     fill: var(--white) !important;
@@ -379,6 +441,7 @@
     height: 100%;
     border-radius: 0 0 0 0;
   }
+  
 
   h3 {
     margin: 40px 0 0;
@@ -391,8 +454,45 @@
     display: inline-block;
     margin: 0 10px;
   }
-  a {
-    color: #42b983;
+  @media screen and (max-width: 992px) {
+    .type-text {
+      font-size: 1em;
+    }
+  }
+
+/* On screens that are 600px or less, set the background color to olive */  
+  @media screen and (max-width: 600px) {
+    .btn-shuffle {
+      padding: 1% 4%;
+      font-size: 1rem;
+    }
+    .back-img {
+      width: 100%;
+    }
+    .poke-name {
+      font-size: 2.5rem !important;
+    }
+    .poke-img {
+      width: 100%;
+    }
+    .type-tag {
+      display: inline-flex;
+      width: 45%;
+      padding: 1% 3%;
+      border-radius: 50px;
+      font-size: 1rem;
+      margin: 0 2%;
+    }
+    .type-text {
+      font-size: 1.5em;
+    }
+    .pokedex-screen__bottom__middle {
+      width: 70%;
+    }
+    .poke-description {
+      font-size: 1.4rem;
+      padding: 0 5px;
+    }
   }
   </style>
   

@@ -1,5 +1,4 @@
 // store.js
-
 import { createStore } from 'vuex';
 
 export default createStore({
@@ -9,6 +8,7 @@ export default createStore({
     first_evolution: null,
     second_evolution: null,
     third_evolution: null,
+    flavor_text: ""
   },
   mutations: {
     setRandomPokemon(state, payload) {
@@ -25,6 +25,9 @@ export default createStore({
     },
     setThirdEvolution(state, payload) {
         state.third_evolution = payload;
+    },
+    setFlavorText(state, payload) {
+        state.flavor_text = payload;
     }
   },
   actions: {
@@ -45,8 +48,11 @@ export default createStore({
     },
     getThirdEvolution(state) {
         return state.third_evolution;
+    },
+    getFlavorText(state) {
+        return state.flavor_text;
     }
-    
+
   } 
 });
 

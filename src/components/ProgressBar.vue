@@ -10,7 +10,7 @@
         }"
         :style="{ width: percentage + '%' }"
       >
-        {{ value }}
+        <p class="progress-value">{{ value }}</p>
       </div>
     </div>
   </template>
@@ -33,15 +33,27 @@
   
   <style>
   .progress {
-    height: 20px;
+    height: auto;
     margin-bottom: 10px;
+    width: 100%;
+    border-radius: 25px;
   }
   
   .progress-bar {
-    color: #fff;
-    font-weight: bold;
+    color: var(--white);
+    font-size: 1.3em;
+    font-weight: 600;
     border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
+
+  .progress-value {
+    font-size: 1.5em;
+    margin-bottom: 0;
+  }
+
   
   /* Customize progress bar colors based on your requirements */
   .bg-danger {

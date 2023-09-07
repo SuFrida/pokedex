@@ -2,85 +2,108 @@
     <div id="stats">
       <div class="stat-card" v-if="getRandomPokemon">
         <div class="stat-card__header">
-          <p>Height: {{ getRandomPokemon.height }}</p>
-          <p>Weight: {{ getRandomPokemon.weight }}</p>
+          <div class="row">
+            <div class="col-12">
+              <p class="poke-description">{{ getFlavorText }}</p>
+            </div>
+          </div>
+          <hr>
+          <div class="row my-4">
+            <div class="col-6">
+              <h1><b>Height:</b> {{ getHeight(getRandomPokemon.height) + ' m' }}</h1>
+            </div>
+            <div class="col-6">
+              <h1><b>Weight:</b> {{ getWeight(getRandomPokemon.weight) + ' kg' }}</h1>
+            </div>
+          </div>
+          <hr>
         </div>
         <div class="stat-card__body">
-          <div class="row">
-            <div class="col-6">
-              <h1>Stats</h1>
+          <div class="row justify-content-evenly">
+            <div class="col-12 col-md-5 px-4">
+              <h1><b>Stats</b></h1>
               <div class="stat-card__stat">
-            <div class="stat-card__stat-name">HP</div>
+            <div class="stat-card__stat-name d-flex justify-content-start"><h2>HP</h2></div>
             <div class="stat-card__stat-value" v-if="getRandomPokemon">
               <ProgressBar :value="getRandomPokemon.stats[0].base_stat"></ProgressBar>
             </div>
           </div>
           <div class="stat-card__stat">
-            <div class="stat-card__stat-name">Attack</div>
+            <div class="stat-card__stat-name d-flex justify-content-start"><h2>ATTACK</h2></div>
             <div class="stat-card__stat-value">
               <ProgressBar :value="getRandomPokemon.stats[1].base_stat"></ProgressBar>
             </div>
           </div>
           <div class="stat-card__stat">
-            <div class="stat-card__stat-name">Defense</div>
+            <div class="stat-card__stat-name d-flex justify-content-start"><h2>DEFENSE</h2></div>
             <div class="stat-card__stat-value">
               <ProgressBar :value="getRandomPokemon.stats[2].base_stat"></ProgressBar>
             </div>
           </div>
           <div class="stat-card__stat">
-            <div class="stat-card__stat-name">Special Attack</div>
+            <div class="stat-card__stat-name d-flex justify-content-start"><h2>SPECIAL ATTACK</h2></div>
             <div class="stat-card__stat-value">
               <ProgressBar :value="getRandomPokemon.stats[3].base_stat"></ProgressBar>
             </div>
           </div>
           <div class="stat-card__stat">
-            <div class="stat-card__stat-name">Special Defense</div>
+            <div class="stat-card__stat-name d-flex justify-content-start"><h2>SPECIAL DEFENSE</h2></div>
             <div class="stat-card__stat-value">
               <ProgressBar :value="getRandomPokemon.stats[4]?.base_stat"></ProgressBar>
             </div>
           </div>
           <div class="stat-card__stat">
-            <div class="stat-card__stat-name">Speed</div>
+            <div class="stat-card__stat-name d-flex justify-content-start"><h2>SPEED</h2></div>
             <div class="stat-card__stat-value">
               <ProgressBar :value="getRandomPokemon.stats[5].base_stat"></ProgressBar>
             </div>
           </div>
             </div>
-            <div class="col-6">
-              <h1>Moves</h1>
+           <div class="d-sm-none col-md-1 d-flex px-2">
+            <hr id="hr">
+           </div>
+            <div class="col-12 col-md-5">
+              <div class="moves">
+                <h1><b>Moves</b></h1>
               <ul>
-                <li v-for="move in getRandomPokemon.moves.slice(0,5)" :key="move">
-                  {{ move.move.name }}
+                <li class="move-li" v-for="move in getRandomPokemon.moves.slice(0,5)" :key="move">
+                  <img class="list-icon" src="../assets/svg/list-icon.svg" alt="">
+                  <p>{{ move.move.name }}</p>
                 </li>
               </ul>
-              <h1>Habilities</h1>
+              </div>
+              <hr>
+              <div class="abilities">
+                <h1><b>Habilities</b></h1>
               <ul>
-                <li v-for="ability in getRandomPokemon.abilities.slice(0,5)" :key="ability">
-                  {{ ability.ability.name }}
+                <li class="ability-li" v-for="ability in getRandomPokemon.abilities.slice(0,5)" :key="ability">
+                  <img class="list-icon" src="../assets/svg/list-icon.svg" alt="">
+                  <p>{{ ability.ability.name }}</p>
                 </li>
               </ul>
-            </div>
-          </div>
-          <div class="row" v-if="getRandomPokemonEvolution">
-            <div class="col-12">
-              <div class="next-evolution" >
-                <h3>Evolutions</h3>
-                {{ showEvolution  }}
-                
               </div>
             </div>
-            <div class="col-12 d-flex">
+          </div>
+          <hr>
+          <div class="row mt-3" v-if="getRandomPokemonEvolution">
+            <div class="col-12">
+              <div class="next-evolution" >
+                <h1><b>Evolutions</b></h1>
+                {{ showEvolution  }}
+              </div>
+            </div>
+            <div class="col-12 d-flex align-items-center justify-content-center">
               <div class="col-4">
               {{ getRandomPokemonEvolution.chain?.species?.name }}
-              <img :src="first_evolution" alt="">
+              <img class="evo-img" :src="first_evolution" alt="">
               </div>
               <div class="col-4">
                 {{ this.getRandomPokemonEvolution.chain?.evolves_to[0]?.species?.name }}
-                <img :src="second_evolution" alt="">
+                <img class="evo-img" :src="second_evolution" alt="">
               </div>
               <div class="col-4">
                 {{ this.getRandomPokemonEvolution.chain?.evolves_to[0]?.evolves_to[0]?.species?.name }}
-                <img :src="third_evolution" alt="">
+                <img class="evo-img" :src="third_evolution" alt="">
               </div>
             </div>
           </div>
@@ -117,6 +140,7 @@
         'getFirstEvolution',
         'getSecondEvolution',
         'getThirdEvolution',
+        'getFlavorText'
       ]),
       showEvolution() {
        if(this.getRandomPokemonEvolution.chain?.species?.name === this.getRandomPokemon?.name) {
@@ -172,7 +196,13 @@
         } catch (error) {
           console.error('Error fetching Pokémon data:', error);
         }
-      }
+      },
+      getHeight(height) {
+        return height / 10;
+      },
+      getWeight(weight) {
+        return weight / 10;
+      },
     },
   }
   </script>
@@ -181,14 +211,41 @@
   <style scoped>
     #stats {
         background-color: var(--white);
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
+        border-radius: 80px 80px 0 0;
+        /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */
+        padding: 6% 3%;
         color: var(--black);
         width: 50%;
+        margin-top: -6%;
+        /* border: 25px solid rgba(219,30,46, 1);; */
+        
     }
+    #hr {
+    -webkit-transform:rotate(90deg);
+    width: 45vh;
+    height:2px;
+    left:130px;
+    border:2px;
+    margin: 1rem 0;
+    color: inherit;
+    border: 0;
+    border-top: var(--bs-border-width) solid;
+    opacity: .25;
+    display: block;
+    unicode-bidi: isolate;
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+    margin-inline-start: auto;
+    margin-inline-end: auto;
+    overflow: hidden;
+}
   .stat-card {
     width: 100%;
+  }
+  .poke-description {
+    font-size: 2rem;
+    font-weight: 500;
+    text-align: center;
   }
   .type-tag {
     display: inline-block;
@@ -198,19 +255,56 @@
     font-size: 1.5rem;
     text-transform: capitalize; 
   }
-  h3 {
-    margin: 40px 0 0;
-  }
   ul {
-    list-style-type: none;
-    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-left: 5%;
   }
-  li {
-    display: inline-block;
-    margin: 0 10px;
+  .move-li {
+    display: block;
+    font-size: 2rem;
+    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
-  a {
-    color: #42b983;
+  .ability-li {
+    display: block;
+    font-size: 2rem;
+    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .list-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+  }
+  .evo-img {
+    width: 100%;
+  }
+  @media screen and (max-width: 992px) {
+    #stats {
+      width: 100%;
+      border-radius: 30px 30px 0 0;
+    }
+    .type-text {
+      font-size: 2rem;
+    }
+    ul {
+      padding-left: 20%;
+    }
+  }
+
+/* On screens that are 600px or less, set the background color to olive */
+  @media screen and (max-width: 600px) {
+    #stats {
+      width: 100%;
+      border-radius: 30px 30px 0 0;
+    }
   }
   </style>
   
