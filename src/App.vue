@@ -11,7 +11,7 @@
   </div>
   
   <footer class="footer">
-    <p>Created by <a href="">Frida SuFrida</a></p>
+    <p>Created by <a href="https://github.com/SuFrida">Frida SuFrida</a></p>
   </footer>
 </template>
 
