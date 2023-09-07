@@ -1,4 +1,4 @@
-# pokedex
+# Pokédex
 
 ## Project setup
 ```
@@ -19,7 +19,6 @@ npm run build
 ```
 npm run lint
 ```
-<hr>
 
 ## Tech Stack
 <ul>
