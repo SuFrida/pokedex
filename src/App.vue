@@ -3,10 +3,10 @@
   </nav>
   <div class="app-section">
     <div class="row">
-    <div class="col-12 col-md-6">
+    <div class="col-12">
       <PokedexPage />
     </div>
-    <div class=" col-12 col-md-6">
+    <div class=" col-12 d-flex justify-content-center">
       <StatsPage />
     </div>
   </div>
@@ -53,24 +53,24 @@ export default {
   --ghost: #705898;
   --dragon: #7038f8;
   --dark: #705848;
-  --electric-gradient: radial-gradient(circle at 50% 50%, rgba(255,206,75, 0.8) 0%, rgba(19, 18, 18, 0) 70%);
-  --fire-gradient: radial-gradient(circle at 50% 50%, rgba(255,89,89, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --grass-gradient: radial-gradient(circle at 50% 50%, rgba(94,255,94, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --water-gradient: radial-gradient(circle at 50% 50%, rgba(75,202,255, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --bug-gradient: radial-gradient(circle at 50% 50%, rgba(168,184,32, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --flying-gradient: radial-gradient(circle at 50% 50%, rgba(168,144,240, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --normal-gradient: radial-gradient(circle at 50% 50%, rgba(168,168,120, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --poison-gradient: radial-gradient(circle at 50% 50%, rgba(160,64,160, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --ground-gradient: radial-gradient(circle at 50% 50%, rgba(224,192,104, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --fairy-gradient: radial-gradient(circle at 50% 50%, rgba(238,153,172, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --fighting-gradient: radial-gradient(circle at 50% 50%, rgba(192,48,40, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --psychic-gradient: radial-gradient(circle at 50% 50%, rgba(248,88,136, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --rock-gradient: radial-gradient(circle at 50% 50%, rgba(184,160,56, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --steel-gradient: radial-gradient(circle at 50% 50%, rgba(184,184,208, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --ice-gradient: radial-gradient(circle at 50% 50%, rgba(152,216,216, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --ghost-gradient: radial-gradient(circle at 50% 50%, rgba(112,88,152, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --dragon-gradient: radial-gradient(circle at 50% 50%, rgba(112,56,248, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
-  --dark-gradient: radial-gradient(circle at 50% 50%, rgba(112,88,72, 0.8) 1%, rgba(19, 18, 18, 0) 70%);
+  --electric-gradient: radial-gradient(circle at 50% 50%, rgba(255,206,75, 0.6) 0%, rgba(19, 18, 18, 0) 35%);
+  --fire-gradient: radial-gradient(circle at 50% 50%, rgba(255,89,89, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --grass-gradient: radial-gradient(circle at 50% 50%, rgba(94,255,94, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --water-gradient: radial-gradient(circle at 50% 50%, rgba(75,202,255, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --bug-gradient: radial-gradient(circle at 50% 50%, rgba(168,184,32, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --flying-gradient: radial-gradient(circle at 50% 50%, rgba(168,144,240, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --normal-gradient: radial-gradient(circle at 50% 50%, rgba(168,168,120, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --poison-gradient: radial-gradient(circle at 50% 50%, rgba(160,64,160, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --ground-gradient: radial-gradient(circle at 50% 50%, rgba(224,192,104, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --fairy-gradient: radial-gradient(circle at 50% 50%, rgba(238,153,172, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --fighting-gradient: radial-gradient(circle at 50% 50%, rgba(192,48,40, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --psychic-gradient: radial-gradient(circle at 50% 50%, rgba(248,88,136, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --rock-gradient: radial-gradient(circle at 50% 50%, rgba(184,160,56, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --steel-gradient: radial-gradient(circle at 50% 50%, rgba(184,184,208, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --ice-gradient: radial-gradient(circle at 50% 50%, rgba(152,216,216, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --ghost-gradient: radial-gradient(circle at 50% 50%, rgba(112,88,152, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --dragon-gradient: radial-gradient(circle at 50% 50%, rgba(112,56,248, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
+  --dark-gradient: radial-gradient(circle at 50% 50%, rgba(112,88,72, 0.6) 1%, rgba(19, 18, 18, 0) 35%);
 
 }
 #app {
@@ -89,12 +89,12 @@ export default {
 .navbar {
   /* Mejorar Navbar */
   /* background-image: url('../src/assets/img/pokedex-navbar.png'); */
-  background-color: rgba(219,30,46, 0.7);
+  background-color: rgba(219,30,46, 0);
   background-position: top;
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
-  height: 12vh;
+  height: 0;
   padding: 0;
 }
 .navbar-container {

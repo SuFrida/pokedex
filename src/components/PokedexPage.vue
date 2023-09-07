@@ -1,41 +1,36 @@
 <template>
     <div id="pokedex">
-      <!-- <div v-if="pokemonData">
-      <h2>{{ pokemonData.name }}</h2>
-      <img :src="pokemonData.sprites.front_default" :alt="pokemonData.name" />
-      <p>Type: {{ pokemonData.types[0].type.name }}</p>
-    </div>
-    <div v-else>
-      <p>Loading Pokémon data...</p>
-    </div> -->
       <div v-if="pokemonData" class="poke-container" :style="{ background : typeGradient }">
         <div class="pokedex-container">
-          <div class="row w-100 justify-content-between">
-            <div class="col-2">
+          <div class="row w-75 justify-content-between">
+            <div class="col-3">
               <h2 class="poke-name">#{{ pokemonData.id }}</h2>
             </div>
+            <div class="col-6">
+              <button class="btn btn-shuffle" @click="fetchRandomPokemon">Mostrar Pokémon</button>
+            </div>
             <div class="col-3">
-              <img class="back-img" :src="pokemonData.sprites.front_default" :alt="pokemonData.name" />
+              <img class="back-img" :class="{'animate__animated animate__bounce' : isAnimating}" :src="pokemonData.sprites.front_default" :alt="pokemonData.name" />
             </div>
           </div>
         <div class="pokedex-screen">
           <div class="pokedex-screen__top">
             <div class="pokedex-screen__top__left"></div>
-            <div class="pokedex-screen__top__middle"><img :src="pokemonData.sprites.other.home.front_default" :alt="pokemonData.name" /></div>
+            <div class="pokedex-screen__top__middle"><img class="poke-img" :src="pokemonData.sprites.other.home.front_default" :alt="pokemonData.name" /></div>
             <div class="pokedex-screen__top__right"></div>
           </div>
+          <h2 class="poke-name">{{ pokemonData.name }}</h2>
           <div class="pokedex-screen__bottom">
             <div class="pokedex-screen__bottom__left"></div>
             <div class="pokedex-screen__bottom__middle">
-              <span class="type-tag" :style="{ backgroundColor: typeColor, color: typeFontColor }">
+              <span class="type-tag" :style="{ backgroundColor: typeColor }">
                 <img class="type-icon" :src="require(`../assets/svg/${typeIcons(pokemonData.types[0].type.name)}`)" alt="">{{ pokemonData.types[0].type.name }}
               </span>
             </div>
             <div class="pokedex-screen__bottom__right"></div>
           </div>
-          <h2 class="poke-name">{{ pokemonData.name }}</h2>
         </div>
-        <div class="pokedex-buttons">
+        <!-- <div class="pokedex-buttons">
           <div class="pokedex-buttons__top">
             <div class="pokedex-buttons__top__left"></div>
             <div class="pokedex-buttons__top__middle"><button class="btn" @click="fetchRandomPokemon">Change Pokemon</button></div>
@@ -46,7 +41,7 @@
             <div class="pokedex-buttons__bottom__middle"></div>
             <div class="pokedex-buttons__bottom__right"></div>
           </div>
-        </div>
+        </div> -->
       </div>
       </div>
       <div v-else>
@@ -57,6 +52,7 @@
   
   <script>
   import axios from 'axios';
+  import { mapState, mapMutations } from 'vuex';
   export default {
     name: 'PokedexPage',
     props: {
@@ -65,10 +61,11 @@
     mounted() {
       this.fetchRandomPokemon(); // Initial fetch
       setInterval(() => {
-        this.fetchRandomPokemon(); // Fetch a random Pokémon every 30 seconds
+        this.fetchRandomPokemon();// Fetch a random Pokémon every 30 seconds
       }, 30000); // 30 seconds in milliseconds
     },
     computed: {
+    ...mapState(['randomPokemon', 'randomPokemonEvolution', 'firstEvolution', 'secondEvolution', 'thirdEvolution']),
       typeColor() {
         const typeColors = {
           electric: '--electric',
@@ -89,30 +86,6 @@
           ghost: '--ghost',
           dragon: '--dragon',
           dark: '--dark',
-        };
-        
-        return `var(${typeColors[this.pokemonData.types[0].type.name]})`;
-      },
-      typeFontColor() {
-        const typeColors = {
-          electric: '--black',
-          fire: '--white',
-          grass: '--white',
-          water: '--black',
-          bug: '--white',
-          flying: '--black',
-          normal: '--black',
-          poison: '--white',
-          ground: '--black',
-          fairy: '--white',
-          fighting: '--white',
-          psychic: '--white',
-          rock: '--black',
-          steel: '--black',
-          ice: '--black',
-          ghost: '--white',
-          dragon: '--white',
-          dark: '--white',
         };
         
         return `var(${typeColors[this.pokemonData.types[0].type.name]})`;
@@ -149,14 +122,55 @@
       }
     },
     methods: {
+      ...mapMutations(['setRandomPokemon', 'setRandomPokemonEvolution', 'setFirstEvolution', 'setSecondEvolution', 'setThirdEvolution']),
+      restartAnimation() {
+      this.isAnimating = false;
+
+      // Trigger a re-render to remove the animation class
+      this.$nextTick(() => {
+        this.isAnimating = true;
+      });
+    },
       fetchRandomPokemon() {
-        const randomPokemonId = Math.floor(Math.random() * 898) + 1; // Generate a random Pokémon ID between 1 and 898
+        const randomPokemonId = Math.floor(Math.random() * 898) + 1; 
+        // Generate a random Pokémon ID between 1 and 898
         axios
           .get(`https://pokeapi.co/api/v2/pokemon/${randomPokemonId}`)
           .then((response) => {
             this.pokemonData = response.data;
-            console.log(response.data)
-           })
+            this.setRandomPokemon(response.data);
+            this.restartAnimation();
+            // Check if the species URL exists in pokemonData
+            const speciesUrl = response.data.species.url;
+            if (speciesUrl) {
+              // Fetch species data using the species URL
+              return axios.get(speciesUrl);
+            } else {
+              throw new Error('Species URL is not available.');
+            }
+          })
+          .then((speciesResponse) => {
+            // Handle species data here
+            const evo = speciesResponse.data.evolution_chain.url;
+            
+            if(evo) {
+              return axios.get(evo);
+            } else {
+              throw new Error('Evolution URL is not available.');
+            }
+          })
+          .then((evolutionResponse) => {
+            // Handle evolution data here
+            
+            this.setRandomPokemonEvolution(evolutionResponse.data);
+            this.setFirstEvolution(evolutionResponse.data.chain.species.name);
+            this.setSecondEvolution(evolutionResponse.data.chain.evolves_to[0]?.species.name);
+            this.setThirdEvolution(evolutionResponse.data.chain.evolves_to[0]?.evolves_to[0]?.species.name);
+
+            // this.first_evolution = evolutionResponse.data.chain.species.name;
+            // this.second_evolution = evolutionResponse.data.chain.evolves_to[0]?.species.name;
+            // this.third_evolution = evolutionResponse.data.chain.evolves_to[0]?.evolves_to[0]?.species.name;
+          })
           .catch((error) => {
             console.error('Error fetching Pokémon data:', error);
           });
@@ -192,7 +206,7 @@
   <!-- Add "scoped" attribute to limit CSS to this component only -->
   <style scoped>
   #pokedex {
-    color: var(--gray);
+    color: var(--white);
   }
   .poke-name {
     text-transform: capitalize;
@@ -202,15 +216,27 @@
     filter: grayscale(100%);
 
   }
-  .icon {
-    fill: var(--white);
+  .btn-shuffle {
+    background-color: var(--white);
+    color: var(--black);
+    border-radius: 10px;
+    border: none;
+    padding: 1% 5%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .btn-shuffle:hover {
+    background-color: var(--black);
+    color: var(--white);
+    transition: 0.3s;
   }
   .poke-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100vh;
     overflow-y: hidden;
   }
   .pokedex-container {
@@ -222,19 +248,16 @@
     height: auto;
     border-radius: 10px;
     overflow-x: hidden;
-    padding: 5%;
+    padding: 5% 5% 0;
   }
   .pokedex-screen {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 90%;
-    height: 80%;
-    
-    /* background-color: #fff; */
+    width: 80%;
+    height: auto;
     border-radius: 10px;
-    /* box-shadow: 0 0 10px rgba(0,0,0,0.2); */
   }
   .pokedex-screen__top {
     display: flex;
@@ -259,12 +282,13 @@
     border-radius: 10px 0 0 0;
   }
   .pokedex-screen__top__middle {
-    width: 60%;
-    height: 100%;
+    width: 50%;
+    height: 50%;
   }
-  .pokedex-screen__top__middle > img {
-    width: 100%;
-    height: 100%;
+  .poke-img {
+    width: 60%;
+    height: auto;
+    
   }
   .pokedex-screen__top__right {
     width: 20%;
@@ -280,13 +304,19 @@
     width: 60%;
     height: 100%;
   }
-  .pokedex-screen__bottom__middle > .type-tag {
-    display: inline-block;
+  .type-tag {
+    display: inline-flex;
+    width: 37%;
     padding: 1% 5%;
     border-radius: 25px;
     color: var(--black);
     font-size: 1.5rem;
-    text-transform: capitalize; 
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  .type-icon {
+    width: 20px;
+    height: 20px;
   }
   .pokedex-screen__bottom__middle > .type-tag > .type-icon {
     fill: var(--white) !important;

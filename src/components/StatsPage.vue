@@ -1,35 +1,88 @@
 <template>
     <div id="stats">
-      <div class="stat-card">
+      <div class="stat-card" v-if="getRandomPokemon">
         <div class="stat-card__header">
-          <h2 class="stat-card__title">Stats</h2>
+          <p>Height: {{ getRandomPokemon.height }}</p>
+          <p>Weight: {{ getRandomPokemon.weight }}</p>
         </div>
         <div class="stat-card__body">
-          <div class="stat-card__stat">
+          <div class="row">
+            <div class="col-6">
+              <h1>Stats</h1>
+              <div class="stat-card__stat">
             <div class="stat-card__stat-name">HP</div>
-            <div class="stat-card__stat-value">
-                
+            <div class="stat-card__stat-value" v-if="getRandomPokemon">
+              <ProgressBar :value="getRandomPokemon.stats[0].base_stat"></ProgressBar>
             </div>
           </div>
           <div class="stat-card__stat">
             <div class="stat-card__stat-name">Attack</div>
-            <div class="stat-card__stat-value"></div>
+            <div class="stat-card__stat-value">
+              <ProgressBar :value="getRandomPokemon.stats[1].base_stat"></ProgressBar>
+            </div>
           </div>
           <div class="stat-card__stat">
             <div class="stat-card__stat-name">Defense</div>
-            <div class="stat-card__stat-value"></div>
+            <div class="stat-card__stat-value">
+              <ProgressBar :value="getRandomPokemon.stats[2].base_stat"></ProgressBar>
+            </div>
           </div>
           <div class="stat-card__stat">
             <div class="stat-card__stat-name">Special Attack</div>
-            <div class="stat-card__stat-value"></div>
+            <div class="stat-card__stat-value">
+              <ProgressBar :value="getRandomPokemon.stats[3].base_stat"></ProgressBar>
+            </div>
           </div>
           <div class="stat-card__stat">
             <div class="stat-card__stat-name">Special Defense</div>
-            <div class="stat-card__stat-value"></div>
+            <div class="stat-card__stat-value">
+              <ProgressBar :value="getRandomPokemon.stats[4]?.base_stat"></ProgressBar>
+            </div>
           </div>
           <div class="stat-card__stat">
             <div class="stat-card__stat-name">Speed</div>
-            <div class="stat-card__stat-value"></div>
+            <div class="stat-card__stat-value">
+              <ProgressBar :value="getRandomPokemon.stats[5].base_stat"></ProgressBar>
+            </div>
+          </div>
+            </div>
+            <div class="col-6">
+              <h1>Moves</h1>
+              <ul>
+                <li v-for="move in getRandomPokemon.moves.slice(0,5)" :key="move">
+                  {{ move.move.name }}
+                </li>
+              </ul>
+              <h1>Habilities</h1>
+              <ul>
+                <li v-for="ability in getRandomPokemon.abilities.slice(0,5)" :key="ability">
+                  {{ ability.ability.name }}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row" v-if="getRandomPokemonEvolution">
+            <div class="col-12">
+              <div class="next-evolution" >
+                <h3>Evolutions</h3>
+                {{ showEvolution  }}
+                
+              </div>
+            </div>
+            <div class="col-12 d-flex">
+              <div class="col-4">
+              {{ getRandomPokemonEvolution.chain?.species?.name }}
+              <img :src="first_evolution" alt="">
+              </div>
+              <div class="col-4">
+                {{ this.getRandomPokemonEvolution.chain?.evolves_to[0]?.species?.name }}
+                <img :src="second_evolution" alt="">
+              </div>
+              <div class="col-4">
+                {{ this.getRandomPokemonEvolution.chain?.evolves_to[0]?.evolves_to[0]?.species?.name }}
+                <img :src="third_evolution" alt="">
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -38,110 +91,47 @@
   
   <script>
   import axios from 'axios';
+  import { mapGetters } from 'vuex';
+  import ProgressBar from './ProgressBar.vue';
   export default {
     name: 'PokedexPage',
-    props: {
-      
+    components: {
+      ProgressBar,
     },
     mounted() {
-      this.fetchRandomPokemon(); // Initial fetch
-      setInterval(() => {
-        this.fetchRandomPokemon(); // Fetch a random Pokémon every 30 seconds
-      }, 30000); // 30 seconds in milliseconds
-    },
-    computed: {
-      typeColor() {
-        const typeColors = {
-          electric: '--electric',
-          fire: '--fire',
-          grass: '--grass',
-          water: '--water',
-          bug: '--bug',
-          flying: '--flying',
-          normal: '--normal',
-          poison: '--poison',
-          ground: '--ground',
-          fairy: '--fairy',
-          fighting: '--fighting',
-          psychic: '--psychic',
-          rock: '--rock',
-          steel: '--steel',
-          ice: '--ice',
-          ghost: '--ghost',
-          dragon: '--dragon',
-          dark: '--dark',
-        };
-        
-        return `var(${typeColors[this.pokemonData.types[0].type.name]})`;
-      },
-      typeFontColor() {
-        const typeColors = {
-          electric: '--black',
-          fire: '--white',
-          grass: '--white',
-          water: '--black',
-          bug: '--white',
-          flying: '--black',
-          normal: '--black',
-          poison: '--white',
-          ground: '--black',
-          fairy: '--white',
-          fighting: '--white',
-          psychic: '--white',
-          rock: '--black',
-          steel: '--black',
-          ice: '--black',
-          ghost: '--white',
-          dragon: '--white',
-          dark: '--white',
-        };
-        
-        return `var(${typeColors[this.pokemonData.types[0].type.name]})`;
-      },
-      typeGradient() {
-        const gradientMap = {
-          electric: '--electric-gradient',
-          fire: '--fire-gradient',
-          grass: '--grass-gradient',
-          water: '--water-gradient',
-          bug: '--bug-gradient',
-          flying: '--flying-gradient',
-          normal: '--normal-gradient',
-          poison: '--poison-gradient',
-          ground: '--ground-gradient',
-          fairy: '--fairy-gradient',
-          fighting: '--fighting-gradient',
-          psychic: '--psychic-gradient',
-          rock: '--rock-gradient',
-          steel: '--steel-gradient',
-          ice: '--ice-gradient',
-          ghost: '--ghost-gradient',
-          dragon: '--dragon-gradient',
-          dark: '--dark-gradient',
-        };
-
-        return `var(${gradientMap[this.pokemonData.types[0].type.name]})`;
-      },
+      this.getEvolutionImgs()
     },
     data () {
       return {
         pokemonData: null,
         pokemonType: null,
+        first_evolution: null,
+        second_evolution: null,
+        third_evolution: null,
       }
     },
-    methods: {
-      fetchRandomPokemon() {
-        const randomPokemonId = Math.floor(Math.random() * 898) + 1; // Generate a random Pokémon ID between 1 and 898
-        axios
-          .get(`https://pokeapi.co/api/v2/pokemon/${randomPokemonId}`)
-          .then((response) => {
-            this.pokemonData = response.data;
-            console.log(response.data)
-           })
-          .catch((error) => {
-            console.error('Error fetching Pokémon data:', error);
-          });
+    computed: {
+      ...mapGetters([
+        'getRandomPokemon', 
+        'getRandomPokemonEvolution',
+        'getFirstEvolution',
+        'getSecondEvolution',
+        'getThirdEvolution',
+      ]),
+      showEvolution() {
+       if(this.getRandomPokemonEvolution.chain?.species?.name === this.getRandomPokemon?.name) {
+        return '1st Evolution'
+       } else if(this.getRandomPokemonEvolution.chain?.evolves_to[0]?.species?.name === this.getRandomPokemon?.name) {
+        return '2nd Evolution'
+       } else if(this.getRandomPokemonEvolution.chain?.evolves_to[0]?.evolves_to[0]?.species?.name === this.getRandomPokemon?.name) {
+        return '3rd Evolution'
+       } else {
+         return 'No more evolutions'
+       }
       },
+      
+    },
+    methods: {
       typeIcons(type) {
         const typeIcons = {
           electric: 'bolt-solid.svg', // Font Awesome lightning bolt icon
@@ -165,6 +155,23 @@
         };
         console.log(typeIcons[type])
         return typeIcons[type];
+      },
+      async getEvolutionImgs() {
+        try {
+          const response1 = await axios.get(`https://pokeapi.co/api/v2/pokemon/${this.getFirstEvolution}`);
+          this.first_evolution = response1.data.sprites?.other?.home?.front_default;
+          console.log(this.first_evolution);
+
+          const response2 = await axios.get(`https://pokeapi.co/api/v2/pokemon/${this.getSecondEvolution}`);
+          this.second_evolution = response2.data.sprites?.other?.home?.front_default;
+          console.log(this.second_evolution);
+
+          const response3 = await axios.get(`https://pokeapi.co/api/v2/pokemon/${this.getThirdEvolution}`);
+          this.third_evolution = response3.data.sprites?.other?.home?.front_default;
+          console.log(this.third_evolution);
+        } catch (error) {
+          console.error('Error fetching Pokémon data:', error);
+        }
       }
     },
   }
@@ -176,12 +183,12 @@
         background-color: var(--white);
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin: 20px 0;
         padding: 20px;
         color: var(--black);
+        width: 50%;
     }
   .stat-card {
-    
+    width: 100%;
   }
   .type-tag {
     display: inline-block;
