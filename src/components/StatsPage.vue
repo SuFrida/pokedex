@@ -20,7 +20,7 @@
         </div>
         <div class="stat-card__body">
           <div class="row justify-content-evenly">
-            <div class="col-12 col-md-5 px-4">
+            <div class="col-12 col-md-6 px-4">
               <h1><b>Stats</b></h1>
               <div class="stat-card__stat">
             <div class="stat-card__stat-name d-flex justify-content-start"><h2>HP</h2></div>
@@ -59,10 +59,10 @@
             </div>
           </div>
             </div>
-           <div class="d-sm-none col-md-1 d-flex px-2">
+           <!-- <div class="d-sm-none col-md-1 d-flex px-2">
             <hr id="hr">
-           </div>
-            <div class="col-12 col-md-5">
+           </div> -->
+            <div class="col-12 col-md-6">
               <div class="moves">
                 <h1><b>Moves</b></h1>
               <ul>

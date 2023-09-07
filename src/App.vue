@@ -109,7 +109,7 @@ export default {
   align-items: center;
   width: 100%;
   height: 8vh;
-  background-color: rgba(219,30,46, 0.7);
+  background-color: rgba(0,0,0, 0.5);
   color: #fff;
   font-size: 1.5rem;
   font-weight: bold;
