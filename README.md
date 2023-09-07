@@ -19,9 +19,7 @@ npm run build
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+<hr>
 
 ## Tech Stack
 <ul>
@@ -32,7 +30,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
   <li>Axios</li>
 </ul>
 
-##REST API
+## REST API
 The API used for this website is [PokéAPI](https://pokeapi.co/)
 
 ### Original Design by Frida SuFrida
