@@ -7,7 +7,7 @@
               <h2 class="poke-name">#{{ pokemonData.id }}</h2>
             </div>
             <div class="col-6">
-              <button class="btn btn-shuffle" @click="fetchRandomPokemon">Show Pokémon</button>
+              <button class="btn btn-shuffle" @click="fetchRandomPokemon">Shuffle Pokémon</button>
             </div>
             <div class="col-3">
               <img class="back-img" :class="{'animate__animated animate__bounce' : isAnimating}" :src="pokemonData.sprites.front_default" :alt="pokemonData.name" />
